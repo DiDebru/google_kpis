@@ -1,1 +1,22 @@
-<!-- Add you custom twig html here -->
+{#
+/**
+ * @file google_kpis.html.twig
+ * Default theme implementation to present Google kpis data.
+ *
+ * This template is used when viewing Google kpis pages.
+ *
+ *
+ * Available variables:
+ * - content: A list of content items. Use 'content' to print all content, or
+ * - attributes: HTML attributes for the container element.
+ *
+ * @see template_preprocess_google_kpis()
+ *
+ * @ingroup themeable
+ */
+#}
+<div{{ attributes.addClass('google_kpis') }}>
+  {% if content %}
+    {{- content -}}
+  {% endif %}
+</div>

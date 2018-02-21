@@ -20,7 +20,7 @@ class GoogleKpisListBuilder extends EntityListBuilder {
   public function buildHeader() {
     $header['referenced_entity'] = $this->t('Referenced Entity');
     $header['name'] = $this->t('Name');
-    return $header + parent::buildHeader();
+    return $header;
   }
 
   /**
@@ -31,10 +31,10 @@ class GoogleKpisListBuilder extends EntityListBuilder {
     $row['referenced_entity'] = $entity->getReferencedEntityId();
     $row['name'] = Link::createFromRoute(
       $entity->label(),
-      'entity.google_kpis.edit_form',
+      'entity.google_kpis.canonical',
       ['google_kpis' => $entity->id()]
     );
-    return $row + parent::buildRow($entity);
+    return $row;
   }
 
 }

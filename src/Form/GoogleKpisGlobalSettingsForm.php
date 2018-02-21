@@ -28,20 +28,75 @@ class GoogleKpisGlobalSettingsForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->config('google_kpis.settings');
-    $form['gsc_settings']['path_to_service_account_json'] = array(
+    $form['gsc_settings'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Google Search Console Settings'),
+      '#open' => TRUE,
+    ];
+    $form['gsc_settings']['auth'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Google Search Console Authentification'),
+    ];
+    $form['gsc_settings']['query'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Google Search Console query settings'),
+    ];
+    $form['gsc_settings']['query']['gsc_start_date'] = array(
+      '#type' => 'textfield',
+      '#title' => $this->t('Start date'),
+      '#description' => $this->t('The date offset your query should start e.g. -7 days'),
+      '#size' => 10,
+      '#default_value' => $config->get('gsc_start_date'),
+      '#required' => TRUE,
+    );
+    $form['gsc_settings']['query']['gsc_end_date'] = array(
+      '#type' => 'textfield',
+      '#title' => $this->t('End date'),
+      '#description' => $this->t('The date offset your query should end e.g. today'),
+      '#size' => 10,
+      '#default_value' => $config->get('gsc_end_date'),
+      '#required' => TRUE,
+    );
+    $form['gsc_settings']['query']['gsc_row_limit'] = array(
+      '#type' => 'number',
+      '#title' => $this->t('Row Limit'),
+      '#description' => $this->t('The limit for your Google search console request default is 1000.'),
+      '#step' => 100,
+      '#default_value' => $config->get('gsc_row_limit'),
+    );
+    $form['gsc_settings']['auth']['path_to_service_account_json'] = array(
       '#type' => 'textfield',
       '#title' => $this->t('The path to your google developer service account json auth.'),
+      '#description' => $this->t('If your authentification file is outside of your webroot you will need a full ,from root to leaf, path! e.g. /home/user/path/to/my/auth.json'),
+      '#size' => 60,
       '#default_value' => $config->get('path_to_service_account_json'),
     );
-    $form['gsc_settings']['start_date'] = array(
-      '#type' => 'textfield',
-      '#title' => $this->t('The date offset your query should start e.g. -7 days'),
-      '#default_value' => $config->get('start_date'),
+    $form['gsc_settings']['auth']['outside_webroot'] = array(
+      '#type' => 'checkbox',
+      '#title' => $this->t('Google service account authentication file is outside of webroot'),
+      '#default_value' => $config->get('outside_webroot'),
     );
-    $form['gsc_settings']['end_date'] = array(
+
+    $form['ga_settings'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Google Analytics Settings'),
+      '#open' => TRUE,
+    ];
+    $form['ga_settings']['ga_start_date'] = array(
       '#type' => 'textfield',
-      '#title' => $this->t('The date offset your query should end e.g. today'),
-      '#default_value' => $config->get('end_date'),
+      '#title' => $this->t('Start date'),
+      '#description' => $this->t('The date offset your query should start e.g. -1 days'),
+      '#size' => 10,
+      '#default_value' => $config->get('ga_start_date'),
+      '#required' => TRUE,
+    );
+    $form['ga_settings']['ga_end_date'] = array(
+      '#type' => 'textfield',
+      '#title' => $this->t('End date'),
+      '#description' => $this->t('The date offset your query should end e.g. today'),
+      '#size' => 10,
+      '#default_value' => $config->get('ga_end_date'),
+      '#required' => TRUE,
     );
     return parent::buildForm($form, $form_state);
   }
@@ -52,7 +107,21 @@ class GoogleKpisGlobalSettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $values = $form_state->getValues();
     $this->config('google_kpis.settings')
+      ->set('outside_webroot', $values['outside_webroot'])
       ->set('path_to_service_account_json', $values['path_to_service_account_json'])
+      ->set('gsc_start_date', $values['gsc_start_date'])
+      ->set('gsc_end_date', $values['gsc_end_date'])
+      ->set('gsc_row_limit', $values['gsc_row_limit'])
+      ->set('ga_start_date', $values['ga_start_date'])
+      ->set('ga_end_date', $values['ga_end_date'])
       ->save();
+  }
+
+  public function validateForm(array &$form, FormStateInterface $form_state) {
+    parent::validateForm($form, $form_state);
+    $values = $form_state->getValues();
+    if (!file_exists($values['path_to_service_account_json'])) {
+      $form_state->setErrorByName('path_to_service_account_json', $this->t('The file you are trying to reference was not found, or Drupal cannot read it'));
+    }
   }
 }

@@ -8,7 +8,7 @@ entity.google_kpis.collection:
   weight: 100
 
 google_kpis.admin.structure.settings:
-  title: Google kpis settings
+  title: Google kpis entity settings
   description: 'Configure Google kpis entities'
   route_name: google_kpis.settings
   parent: system.admin_structure

@@ -3,6 +3,8 @@
 namespace Drupal\google_kpis\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Database\Connection;
+use Drupal\node\Entity\Node;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Entity\EntityTypeManager;
@@ -18,6 +20,7 @@ class GoogleKpisController extends ControllerBase {
    * @var \Drupal\Core\Routing\CurrentRouteMatch
    */
   protected $currentRouteMatch;
+
   /**
    * Drupal\Core\Entity\EntityTypeManager definition.
    *
@@ -26,11 +29,19 @@ class GoogleKpisController extends ControllerBase {
   protected $entityTypeManager;
 
   /**
+   * \Drupal\Core\Database\Connection definition.
+   *
+   * @var \Drupal\Core\Database\Connection $database
+   */
+  protected $database;
+
+  /**
    * Constructs a new GoogleKpisController object.
    */
-  public function __construct(CurrentRouteMatch $current_route_match, EntityTypeManager $entity_type_manager) {
+  public function __construct(CurrentRouteMatch $current_route_match, EntityTypeManager $entity_type_manager, Connection $database) {
     $this->currentRouteMatch = $current_route_match;
     $this->entityTypeManager = $entity_type_manager;
+    $this->database = $database;
   }
 
   /**
@@ -39,7 +50,8 @@ class GoogleKpisController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('current_route_match'),
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('database')
     );
   }
 
@@ -49,11 +61,32 @@ class GoogleKpisController extends ControllerBase {
    * @return array
    *   Return Hello string.
    */
-  public function content($node) {
-    return [
-      '#type' => 'markup',
-      '#markup' => $this->t('Implement method: content with parameter(s): $node'),
-    ];
+  public function content() {
+    $node = $this->currentRouteMatch->getParameter('node');
+    if (is_numeric($node)) {
+      $node = $this->entityTypeManager->getStorage('node')->load($node);
+    }
+    if ($node instanceof Node) {
+      $gkid = $this->entityTypeManager->getStorage('google_kpis')
+        ->getQuery('AND')
+        ->condition('referenced_entity', $node->id())
+        ->execute();
+      $gkid = reset($gkid);
+      if ($node->hasField('field_google_kpis') && $gkid) {
+        $node->set('field_google_kpis', $gkid);
+        $node->save();
+        $google_kpi = $this->entityTypeManager->getStorage('google_kpis')->load($gkid);
+        $view_builder = $this->entityTypeManager->getViewBuilder('google_kpis');
+        return [
+          '#type' => 'markup',
+          '#markup' => render($view_builder->view($google_kpi)),
+        ];
+      }
+      return [
+        '#type' => 'markup',
+        '#markup' => 'Nothing to show here , yet!',
+      ];
+    }
   }
 
 }

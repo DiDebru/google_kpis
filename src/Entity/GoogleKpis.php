@@ -146,7 +146,7 @@ class GoogleKpis extends ContentEntityBase implements GoogleKpisInterface {
   }
 
   public function getReferencedEntityId() {
-    return $this->get('referenced_entity')->entity->id();
+    return $this->get('referenced_entity')->entity ? $this->get('referenced_entity')->entity->id() : NULL;
   }
 
   /**

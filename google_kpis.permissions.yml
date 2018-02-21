@@ -6,14 +6,5 @@ administer google kpis:
   description: 'Allow to access the administration form to configure Google kpis.'
   restrict access: true
 
-delete google kpis entities:
-  title: 'Delete Google kpis entities'
-
-edit google kpis entities:
-  title: 'Edit Google kpis entities'
-
-view published google kpis entities:
-  title: 'View published Google kpis entities'
-
-view unpublished google kpis entities:
-  title: 'View unpublished Google kpis entities'
+view google kpis entities:
+  title: 'View Google kpis entities'

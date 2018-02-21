@@ -12,6 +12,6 @@ google_kpis.controller_content:
     _controller: '\Drupal\google_kpis\Controller\GoogleKpisController::content'
     _title: 'Google KPIs'
   requirements:
-    _permission: 'view published google kpis entities'
+    _permission: 'view google kpis entities'
   options:
     _admin_route: TRUE
