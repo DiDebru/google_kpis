@@ -1,0 +1,24 @@
+uuid: f854c15d-fb77-49e4-8d17-1bf43351127d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.google_kpis.field_position
+  module:
+    - google_kpis
+id: google_kpis.google_kpis.field_position
+field_name: field_position
+entity_type: google_kpis
+bundle: google_kpis
+label: Position
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

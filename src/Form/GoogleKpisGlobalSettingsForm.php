@@ -2,7 +2,6 @@
 
 namespace Drupal\google_kpis\Form;
 
-
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
@@ -28,7 +27,7 @@ class GoogleKpisGlobalSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $config = $this->config('your_module.settings');
+    $config = $this->config('google_kpis.settings');
     $form['your_message'] = array(
       '#type' => 'textfield',
       '#title' => $this->t('Your message'),
@@ -42,7 +41,7 @@ class GoogleKpisGlobalSettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $values = $form_state->getValues();
-    $this->config('your_module.settings')
+    $this->config('google_kpis.settings')
       ->set('your_message', $values['your_message'])
       ->save();
   }

@@ -2,6 +2,16 @@ google_kpis.admin_settings_form:
   path: '/admin/config/system/google-kpis'
   defaults:
     _form: '\Drupal\google_kpis\Form\GoogleKpisGlobalSettingsForm'
-    _title: 'Google Analytics'
+    _title: 'Google KPIs'
   requirements:
     _permission: 'administer google kpis'
+
+google_kpis.controller_content:
+  path: 'node/{node}/kpis'
+  defaults:
+    _controller: '\Drupal\google_kpis\Controller\GoogleKpisController::content'
+    _title: 'Google KPIs'
+  requirements:
+    _permission: 'view published google kpis entities'
+  options:
+    _admin_route: TRUE

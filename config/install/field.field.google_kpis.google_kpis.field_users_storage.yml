@@ -1,0 +1,24 @@
+uuid: f1642bd0-989f-452e-8287-1de8d5bd3224
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.google_kpis.field_users_storage
+  module:
+    - google_kpis
+id: google_kpis.google_kpis.field_users_storage
+field_name: field_users_storage
+entity_type: google_kpis
+bundle: google_kpis
+label: users_storage
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

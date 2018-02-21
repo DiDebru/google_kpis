@@ -1,0 +1,20 @@
+uuid: eb8b1f67-b30b-4193-ba77-9d520593c8fb
+langcode: en
+status: true
+dependencies:
+  module:
+    - google_kpis
+id: google_kpis.field_clicks
+field_name: field_clicks
+entity_type: google_kpis
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

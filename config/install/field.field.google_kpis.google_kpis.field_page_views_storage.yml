@@ -1,0 +1,24 @@
+uuid: dcdf0f6b-87d7-4b23-ba0a-f6ce76579c30
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.google_kpis.field_page_views_storage
+  module:
+    - google_kpis
+id: google_kpis.google_kpis.field_page_views_storage
+field_name: field_page_views_storage
+entity_type: google_kpis
+bundle: google_kpis
+label: page_views_storage
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

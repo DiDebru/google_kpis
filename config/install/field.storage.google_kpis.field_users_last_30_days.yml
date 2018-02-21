@@ -1,0 +1,20 @@
+uuid: e48c528c-2efe-4bf9-a73d-a3ed944116f7
+langcode: en
+status: true
+dependencies:
+  module:
+    - google_kpis
+id: google_kpis.field_users_last_30_days
+field_name: field_users_last_30_days
+entity_type: google_kpis
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -18,7 +18,7 @@ class GoogleKpisListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function buildHeader() {
-    $header['id'] = $this->t('Google kpis ID');
+    $header['referenced_entity'] = $this->t('Referenced Entity');
     $header['name'] = $this->t('Name');
     return $header + parent::buildHeader();
   }
@@ -28,7 +28,7 @@ class GoogleKpisListBuilder extends EntityListBuilder {
    */
   public function buildRow(EntityInterface $entity) {
     /* @var $entity \Drupal\google_kpis\Entity\GoogleKpis */
-    $row['id'] = $entity->id();
+    $row['referenced_entity'] = $entity->getReferencedEntityId();
     $row['name'] = Link::createFromRoute(
       $entity->label(),
       'entity.google_kpis.edit_form',

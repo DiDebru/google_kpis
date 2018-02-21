@@ -1,0 +1,20 @@
+uuid: e58ebaa3-3061-4628-af5b-bbcaae1054a6
+langcode: en
+status: true
+dependencies:
+  module:
+    - google_kpis
+id: google_kpis.field_users_storage
+field_name: field_users_storage
+entity_type: google_kpis
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

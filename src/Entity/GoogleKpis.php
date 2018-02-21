@@ -145,6 +145,10 @@ class GoogleKpis extends ContentEntityBase implements GoogleKpisInterface {
     return $this;
   }
 
+  public function getReferencedEntityId() {
+    return $this->get('referenced_entity')->entity->id();
+  }
+
   /**
    * {@inheritdoc}
    */
@@ -209,6 +213,9 @@ class GoogleKpis extends ContentEntityBase implements GoogleKpisInterface {
       ->setLabel(t('Changed'))
       ->setDescription(t('The time that the entity was last edited.'));
 
+    $fields['referenced_entity'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Referenced entity'))
+      ->setDescription(t('The Entity we have data for.'));
     return $fields;
   }
 

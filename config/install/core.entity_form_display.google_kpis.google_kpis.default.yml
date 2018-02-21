@@ -1,0 +1,47 @@
+uuid: 07ae7258-d5f0-4fe9-b73e-5d654fd1d66a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.google_kpis.google_kpis.field_clicks
+    - field.field.google_kpis.google_kpis.field_ctr
+    - field.field.google_kpis.google_kpis.field_impressions
+    - field.field.google_kpis.google_kpis.field_og_searches_last_30_days
+    - field.field.google_kpis.google_kpis.field_og_searches_storage
+    - field.field.google_kpis.google_kpis.field_og_searches_yesterday
+    - field.field.google_kpis.google_kpis.field_page_views_last_30_days
+    - field.field.google_kpis.google_kpis.field_page_views_storage
+    - field.field.google_kpis.google_kpis.field_page_views_yesterday
+    - field.field.google_kpis.google_kpis.field_position
+    - field.field.google_kpis.google_kpis.field_sessions_last_30_days
+    - field.field.google_kpis.google_kpis.field_sessions_storage
+    - field.field.google_kpis.google_kpis.field_sessions_yesterday
+    - field.field.google_kpis.google_kpis.field_users_last_30_days
+    - field.field.google_kpis.google_kpis.field_users_storage
+    - field.field.google_kpis.google_kpis.field_users_yesterday
+  module:
+    - google_kpis
+id: google_kpis.google_kpis.default
+targetEntityType: google_kpis
+bundle: google_kpis
+mode: default
+content: {  }
+hidden:
+  field_clicks: true
+  field_ctr: true
+  field_impressions: true
+  field_og_searches_last_30_days: true
+  field_og_searches_storage: true
+  field_og_searches_yesterday: true
+  field_page_views_last_30_days: true
+  field_page_views_storage: true
+  field_page_views_yesterday: true
+  field_position: true
+  field_sessions_last_30_days: true
+  field_sessions_storage: true
+  field_sessions_yesterday: true
+  field_users_last_30_days: true
+  field_users_storage: true
+  field_users_yesterday: true
+  name: true
+  user_id: true

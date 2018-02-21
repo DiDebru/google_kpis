@@ -1,0 +1,20 @@
+uuid: c9346271-1934-4e5a-bcbe-013256b0c682
+langcode: en
+status: true
+dependencies:
+  module:
+    - google_kpis
+id: google_kpis.field_ctr
+field_name: field_ctr
+entity_type: google_kpis
+type: decimal
+settings:
+  precision: 32
+  scale: 5
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

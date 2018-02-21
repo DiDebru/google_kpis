@@ -1,0 +1,5 @@
+services:
+  google_kpis.fetch_and_store:
+    class: Drupal\google_kpis\GoogleKpisFetchAndStore
+    arguments: ['@database', '@entity_type.manager']
+
