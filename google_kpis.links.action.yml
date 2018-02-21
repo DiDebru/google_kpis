@@ -1,0 +1,5 @@
+entity.google_kpis.add_form:
+  route_name: entity.google_kpis.add_form
+  title: 'Add Google kpis'
+  appears_on:
+    - entity.google_kpis.collection

@@ -1,0 +1,22 @@
+# Google kpis routing definition
+google_kpis.settings_tab:
+  route_name: google_kpis.settings
+  title: 'Settings'
+  base_route: google_kpis.settings
+
+entity.google_kpis.canonical:
+  route_name: entity.google_kpis.canonical
+  base_route: entity.google_kpis.canonical
+  title: 'View'
+
+entity.google_kpis.edit_form:
+  route_name: entity.google_kpis.edit_form
+  base_route: entity.google_kpis.canonical
+  title: 'Edit'
+
+entity.google_kpis.delete_form:
+  route_name:  entity.google_kpis.delete_form
+  base_route:  entity.google_kpis.canonical
+  title: Delete
+  weight: 10
+

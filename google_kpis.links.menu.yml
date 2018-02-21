@@ -1,0 +1,14 @@
+
+# Google kpis menu items definition
+entity.google_kpis.collection:
+  title: 'Google kpis list'
+  route_name: entity.google_kpis.collection
+  description: 'List Google kpis entities'
+  parent: system.admin_structure
+  weight: 100
+
+google_kpis.admin.structure.settings:
+  title: Google kpis settings
+  description: 'Configure Google kpis entities'
+  route_name: google_kpis.settings
+  parent: system.admin_structure
