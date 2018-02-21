@@ -28,10 +28,20 @@ class GoogleKpisGlobalSettingsForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->config('google_kpis.settings');
-    $form['your_message'] = array(
+    $form['gsc_settings']['path_to_service_account_json'] = array(
       '#type' => 'textfield',
-      '#title' => $this->t('Your message'),
-      '#default_value' => $config->get('your_message'),
+      '#title' => $this->t('The path to your google developer service account json auth.'),
+      '#default_value' => $config->get('path_to_service_account_json'),
+    );
+    $form['gsc_settings']['start_date'] = array(
+      '#type' => 'textfield',
+      '#title' => $this->t('The date offset your query should start e.g. -7 days'),
+      '#default_value' => $config->get('start_date'),
+    );
+    $form['gsc_settings']['end_date'] = array(
+      '#type' => 'textfield',
+      '#title' => $this->t('The date offset your query should end e.g. today'),
+      '#default_value' => $config->get('end_date'),
     );
     return parent::buildForm($form, $form_state);
   }
@@ -42,7 +52,7 @@ class GoogleKpisGlobalSettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $values = $form_state->getValues();
     $this->config('google_kpis.settings')
-      ->set('your_message', $values['your_message'])
+      ->set('path_to_service_account_json', $values['path_to_service_account_json'])
       ->save();
   }
 }
