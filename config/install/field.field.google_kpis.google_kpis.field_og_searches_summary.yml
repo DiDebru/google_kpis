@@ -1,16 +1,16 @@
-uuid: be2cc180-49d5-42f4-8b91-1dd702d84885
+uuid: 1a915155-0d77-41c4-9de7-db5943d03391
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.google_kpis.field_og_searches_last_30_days
+    - field.storage.google_kpis.field_og_searches_summary
   module:
     - google_kpis
-id: google_kpis.google_kpis.field_og_searches_last_30_days
-field_name: field_og_searches_last_30_days
+id: google_kpis.google_kpis.field_og_searches_summary
+field_name: field_og_searches_summary
 entity_type: google_kpis
 bundle: google_kpis
-label: 'OG Searches last 30 days'
+label: 'OG Searches summary'
 description: ''
 required: false
 translatable: false

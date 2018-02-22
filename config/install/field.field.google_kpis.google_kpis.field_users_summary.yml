@@ -1,16 +1,16 @@
-uuid: 1a5de19a-3c4d-496d-9889-7eec837e678f
+uuid: e57c2038-63c4-4aa8-92f9-df3bae0970a8
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.google_kpis.field_page_views_last_30_days
+    - field.storage.google_kpis.field_users_summary
   module:
     - google_kpis
-id: google_kpis.google_kpis.field_page_views_last_30_days
-field_name: field_page_views_last_30_days
+id: google_kpis.google_kpis.field_users_summary
+field_name: field_users_summary
 entity_type: google_kpis
 bundle: google_kpis
-label: 'Page Views last 30 days'
+label: 'Users summary'
 description: ''
 required: false
 translatable: false

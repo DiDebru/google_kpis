@@ -1,11 +1,11 @@
-uuid: e4278b2e-d8e1-4ff6-a91a-75ee8d0234b1
+uuid: 9e91697a-b583-47f1-97c2-34d4855c0b79
 langcode: en
 status: true
 dependencies:
   module:
     - google_kpis
-id: google_kpis.field_og_searches_last_30_days
-field_name: field_og_searches_last_30_days
+id: google_kpis.field_page_views_summary
+field_name: field_page_views_summary
 entity_type: google_kpis
 type: integer
 settings:

@@ -97,9 +97,9 @@ class GoogleKpisFetchAndStore {
       $ga_nodes = [];
       $count = NULL;
       $sessions_last_30 = NULL;
-      $users_last_30 = NULL;
-      $pageviews_last_30 = NULL;
-      $ogsearches_last_30 = NULL;
+      $users_summary = NULL;
+      $pageviews_summary = NULL;
+      $ogsearches_summary = NULL;
       foreach ($ga_query->results->rows as $article) {
         // Get system path from path alias.
         $path_source = $this->database->select('url_alias', 'ua')->fields('ua', ['source'])->condition('alias', $article['pagePath'])->execute()->fetchField();
@@ -119,18 +119,23 @@ class GoogleKpisFetchAndStore {
               $ga_users = $article['users'];
               $ga_sessions = $article['sessions'];
               $ga_organicsearches = $article['organicsearches'];
+              /** @var GoogleKpis $google_kpi */
+              $google_kpi = $this->linkGoogleKpiswithNode($node);
               // Get Storage value.
-              $ga_sessions_storage = $node->field_ga_sessions_storage->getValue();
-              $ga_users_storage = $node->field_ga_users_storage->getValue();
-              $ga_pageviews_storage = $node->field_ga_pageviews_storage->getValue();
-              $ga_ogsearches_storage = $node->field_ga_ogsearches_storage->getValue();
+              $ga_sessions_storage = $google_kpi->field_sessions_storage->getValue();
+              $ga_users_storage = $google_kpi->field_users_storage->getValue();
+              $ga_pageviews_storage = $google_kpi->field_pageviews_storage->getValue();
+              $ga_ogsearches_storage = $google_kpi->field_ogsearches_storage->getValue();
               // Add new value to array.
               $ga_sessions_storage[]['value'] = $ga_sessions;
               $ga_users_storage[]['value'] = $ga_users;
               $ga_pageviews_storage[]['value'] = $ga_pageviews;
               $ga_ogsearches_storage[]['value'] = $ga_organicsearches;
               // Summary of the last 30 elements.
-              $max_storage = 29;
+              $max_storage = $this->googleKpisSettings->get('max_storage');
+              if (!$max_storage || empty($max_storage) || $max_storage == 0) {
+                $max_storage = 29;
+              }
               foreach ($ga_sessions_storage as $delta => $value) {
                 if ($delta > $max_storage) {
                   unset($ga_sessions_storage[0]);
@@ -143,42 +148,42 @@ class GoogleKpisFetchAndStore {
                   unset($ga_users_storage[0]);
                   array_values($ga_users_storage);
                 }
-                $users_last_30 = $users_last_30 + $value['value'];
+                $users_summary = $users_summary + $value['value'];
               }
               foreach ($ga_pageviews_storage as $delta => $value) {
                 if ($delta > $max_storage) {
                   unset($ga_pageviews_storage[0]);
                   array_values($ga_pageviews_storage);
                 }
-                $pageviews_last_30 = $pageviews_last_30 + $value['value'];
+                $pageviews_summary = $pageviews_summary + $value['value'];
               }
               foreach ($ga_ogsearches_storage as $delta => $value) {
                 if ($delta > $max_storage) {
                   unset($ga_ogsearches_storage[0]);
                   array_values($ga_ogsearches_storage);
                 }
-                $ogsearches_last_30 = $ogsearches_last_30 + $value['value'];
+                $ogsearches_summary = $ogsearches_summary + $value['value'];
               }
               // Set storage values.
-              $node->set('field_ga_sessions_storage', $ga_sessions_storage);
-              $node->set('field_ga_users_storage', $ga_users_storage);
-              $node->set('field_ga_pageviews_storage', $ga_pageviews_storage);
-              $node->set('field_ga_ogsearches_storage', $ga_ogsearches_storage);
+              $google_kpi->set('field_sessions_storage', $ga_sessions_storage);
+              $google_kpi->set('field_users_storage', $ga_users_storage);
+              $google_kpi->set('field_page_views_storage', $ga_pageviews_storage);
+              $google_kpi->set('field_og_searches_storage', $ga_ogsearches_storage);
               // Set values for 1 day.
-              $node->set('field_ga_sessions_yesterday', $ga_sessions);
-              $node->set('field_ga_users_yesterday', $ga_users);
-              $node->set('field_ga_pageviews_yesterday', $ga_pageviews);
-              $node->set('field_ga_ogsearches_yesterday', $ga_organicsearches);
+              $google_kpi->set('field_sessions_yesterday', $ga_sessions);
+              $google_kpi->set('field_users_yesterday', $ga_users);
+              $google_kpi->set('field_page_views_yesterday', $ga_pageviews);
+              $google_kpi->set('field_og_searches_yesterday', $ga_organicsearches);
               // Set storage summary for last 30 days.
-              $node->set('field_ga_sessions_last_30_days', $sessions_last_30);
-              $node->set('field_ga_users_last_30_days', $users_last_30);
-              $node->set('field_ga_pageviews_last_30_days', $pageviews_last_30);
-              $node->set('field_ga_ogsearches_last_30_days', $ogsearches_last_30);
+              $google_kpi->set('field_sessions_summary', $sessions_last_30);
+              $google_kpi->set('field_users_summary', $users_summary);
+              $google_kpi->set('field_pageviews_summary', $pageviews_summary);
+              $google_kpi->set('field_og_searches_summary', $ogsearches_summary);
               // Set summary variables back to NULL.
-              $sessions_last_30 = NULL;
-              $users_last_30 = NULL;
-              $pageviews_last_30 = NULL;
-              $ogsearches_last_30 = NULL;
+              $sessions_summary = NULL;
+              $users_summary = NULL;
+              $pageviews_summary = NULL;
+              $ogsearches_summary = NULL;
 
               $node->setNewRevision(FALSE);
               $node->save();
@@ -190,32 +195,32 @@ class GoogleKpisFetchAndStore {
       // Set fields value to 0 if the article is not in ga report.
       $count = NULL;
       // Get Articles that are not in GA report.
-      $articles_not_in_ga = array_diff($published_nodes, $ga_articles);
-      foreach ($articles_not_in_ga as $revision_id => $nid) {
+      $nodes_not_in_ga = array_diff($published_nodes, $ga_nodes);
+      foreach ($nodes_not_in_ga as $revision_id => $nid) {
         if ($count && $count % 50 == '0') {
           // Reset static entity cache.
-          $this->entityTypeManager->getStorage('node')->resetCache();
+          $this->entityTypeManager->getStorage('google_kpis')->resetCache();
         }
-        $node = Node::load($nid);
-        if ($node instanceof Node && $node->bundle() == 'article') {
-          $node->set('field_ga_sessions_yesterday', '0');
-          $node->set('field_ga_users_yesterday', '0');
-          $node->set('field_ga_pageviews_yesterday', '0');
-          $node->set('field_ga_ogsearches_yesterday', '0');
-          if (is_null($node->field_ga_sessions_last_30_days->value)) {
-            $node->set('field_ga_sessions_last_30_days', '0');
+        $node = $this->entityTypeManager->getStorage('node')->load($nid);
+        if ($node instanceof Node) {
+          $google_kpi = $this->linkGoogleKpiswithNode($node);
+          $google_kpi->set('field_sessions_yesterday', '0');
+          $google_kpi->set('field_users_yesterday', '0');
+          $google_kpi->set('field_page_views_yesterday', '0');
+          $google_kpi->set('field_ogsearches_yesterday', '0');
+          if (is_null($google_kpi->field_sessions_summary->value)) {
+            $google_kpi->set('field_sessions_summary', '0');
           }
-          if (is_null($node->field_ga_users_last_30_days->value)) {
-            $node->set('field_ga_users_last_30_days', '0');
+          if (is_null($google_kpi->field_users_summary->value)) {
+            $google_kpi->set('field_users_summary', '0');
           }
-          if (is_null($node->field_ga_pageviews_last_30_days->value)) {
-            $node->set('field_ga_pageviews_last_30_days', '0');
+          if (is_null($google_kpi->field_pageviews_summary->value)) {
+            $google_kpi->set('field_pageviews_summary', '0');
           }
-          if (is_null($node->field_ga_ogsearches_last_30_days->value)) {
-            $node->set('field_ga_ogsearches_last_30_days', '0');
+          if (is_null($google_kpi->field_ogsearches_summary->value)) {
+            $google_kpi->set('field_og_searches_summary', '0');
           }
-          $node->setNewRevision(FALSE);
-          $node->save();
+          $google_kpi->save();
           $count++;
         }
       }
@@ -277,26 +282,7 @@ class GoogleKpisFetchAndStore {
                 $this->entityTypeManager->getStorage('node')->resetCache();
               }
               $node = $this->entityTypeManager->getStorage('node')->load($node_id);
-              $gkids = $this->entityTypeManager->getStorage('google_kpis')->getQuery('AND')->condition('referenced_entity', $node->id())->execute();
-              $gkid = reset($gkids);
-              if ($node instanceof Node && $node->hasField('field_google_kpis')) {
-                $field_value = $node->field_google_kpis->entity;
-                if ($field_value && $field_value instanceof GoogleKpis) {
-                  $google_kpi = $field_value;
-                }
-              } else if ($gkid) {
-                $google_kpi = $this->entityTypeManager->getStorage('google_kpis')->load($gkid);
-              } else {
-                $google_kpi = GoogleKpis::create([
-                  'name' => $node->getTitle(),
-                  'referenced_entity' => $node->id(),
-                ]);
-                if ($node->hasField('field_google_kpis')) {
-                  $node->set('field_google_kpis', $google_kpi->id());
-                  $node->save();
-                }
-
-              }
+              $google_kpi = $this->linkGoogleKpiswithNode($node);
               $gsc_ctr = $gsc_row->getCtr() * 100;
               $google_kpi->set('field_clicks', $gsc_row->getClicks());
               $google_kpi->set('field_impressions', $gsc_row->getImpressions());
@@ -318,25 +304,7 @@ class GoogleKpisFetchAndStore {
             $this->entityTypeManager->getStorage('node')->resetCache();
           }
           if ($node instanceof Node) {
-            $gkids = $this->entityTypeManager->getStorage('google_kpis')->getQuery('AND')->condition('referenced_entity', $node->id())->execute();
-            $gkid = reset($gkids);
-            if ($node instanceof Node && $node->hasField('field_google_kpis')) {
-              $field_value = $node->field_google_kpis->entity;
-              if ($field_value && $field_value instanceof GoogleKpis) {
-                $google_kpi = $field_value;
-              }
-            } else if ($gkid) {
-              $google_kpi = $this->entityTypeManager->getStorage('google_kpis')->load($gkid);
-            } else {
-              $google_kpi = GoogleKpis::create([
-                'name' => $node->getTitle(),
-                'referenced_entity' => $node->id(),
-              ]);
-              if ($node->hasField('field_google_kpis')) {
-                $node->set('field_google_kpis', $google_kpi->id());
-                $node->save();
-              }
-            }
+            $google_kpi = $this->linkGoogleKpiswithNode($node);
             $google_kpi->set('field_clicks', 0);
             $google_kpi->set('field_impressions', 0);
             $google_kpi->set('field_ctr', 0);
@@ -351,4 +319,34 @@ class GoogleKpisFetchAndStore {
     }
   }
 
+  /**
+   * Checks if the node has field_google_kpis, links to the google kpis entity,
+   * if node has field_google_kpis.
+   *
+   * @param Node $node
+   *
+   * @return Drupal\Core\Entity\EntityInterface|GoogleKpis
+   */
+  public function linkGoogleKpiswithNode(Node $node) {
+    $gkids = $this->entityTypeManager->getStorage('google_kpis')->getQuery('AND')->condition('referenced_entity', $node->id())->execute();
+    $gkid = reset($gkids);
+    if ($node instanceof Node && $node->hasField('field_google_kpis')) {
+      $field_value = $node->field_google_kpis->entity;
+      if ($field_value && $field_value instanceof GoogleKpis) {
+        $google_kpi = $field_value;
+      }
+    } else if ($gkid) {
+      $google_kpi = $this->entityTypeManager->getStorage('google_kpis')->load($gkid);
+    } else {
+      $google_kpi = GoogleKpis::create([
+        'name' => $node->getTitle(),
+        'referenced_entity' => $node->id(),
+      ]);
+      if ($node->hasField('field_google_kpis')) {
+        $node->set('field_google_kpis', $google_kpi->id());
+        $node->save();
+      }
+    }
+    return $google_kpi;
+  }
 }

@@ -98,6 +98,13 @@ class GoogleKpisGlobalSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('ga_end_date'),
       '#required' => TRUE,
     );
+    $form['ga_settings']['max_storage'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Max Storage'),
+      '#description' => $this->t('The maximum value you want your GA data to be stored, default is 29.'),
+      '#default_value' => $config->get('ḿax_storage'),
+      '#min' => 1,
+    ];
     return parent::buildForm($form, $form_state);
   }
 
@@ -114,6 +121,7 @@ class GoogleKpisGlobalSettingsForm extends ConfigFormBase {
       ->set('gsc_row_limit', $values['gsc_row_limit'])
       ->set('ga_start_date', $values['ga_start_date'])
       ->set('ga_end_date', $values['ga_end_date'])
+      ->set('max_storage', $values['max_storage'])
       ->save();
   }
 
