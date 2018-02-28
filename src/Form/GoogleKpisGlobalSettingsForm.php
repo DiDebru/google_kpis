@@ -64,6 +64,14 @@ class GoogleKpisGlobalSettingsForm extends ConfigFormBase {
       '#step' => 100,
       '#default_value' => $config->get('gsc_row_limit'),
     );
+    $form['gsc_settings']['query']['gsc_prod_url'] = array(
+      '#type' => 'textfield',
+      '#title' => $this->t('Site Url'),
+      '#description' => $this->t('The site you want to fetch data for.'),
+      '#size' => 10,
+      '#required' => TRUE,
+      '#default_value' => $config->get('gsc_row_limit'),
+    );
     $form['gsc_settings']['auth']['path_to_service_account_json'] = array(
       '#type' => 'textfield',
       '#title' => $this->t('The path to your google developer service account json auth.'),
@@ -119,6 +127,7 @@ class GoogleKpisGlobalSettingsForm extends ConfigFormBase {
       ->set('gsc_start_date', $values['gsc_start_date'])
       ->set('gsc_end_date', $values['gsc_end_date'])
       ->set('gsc_row_limit', $values['gsc_row_limit'])
+      ->set('gsc_prod_url', $values['gsc_prod_url'])
       ->set('ga_start_date', $values['ga_start_date'])
       ->set('ga_end_date', $values['ga_end_date'])
       ->set('max_storage', $values['max_storage'])

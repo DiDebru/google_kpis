@@ -241,6 +241,7 @@ class GoogleKpisFetchAndStore {
     $start_date = trim(strip_tags($this->googleKpisSettings->get('gsc_start_date')));
     $end_date = trim(strip_tags($this->googleKpisSettings->get('gsc_end_date')));
     $row_limit = $this->googleKpisSettings->get('gsc_row_limit');
+    $site_url = $this->googleKpisSettings->get('gsc_prod_url');
     if (is_null($row_limit) || $row_limit == 0) {
       $row_limit = 1000;
     }
@@ -261,7 +262,7 @@ class GoogleKpisFetchAndStore {
       $query->setStartDate(date("Y-m-d", strtotime($start_date)));
       $query->setEndDate(date('Y-m-d', strtotime($end_date)));
       $query->setDimensions(['page']);
-      $query->setRowLimit(5000);
+      $query->setRowLimit($row_limit);
       try {
         $data = $service->searchanalytics->query('http://www.mylife.de', $query);
         $gsc_rows = $data->getRows();
