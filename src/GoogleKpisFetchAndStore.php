@@ -325,40 +325,43 @@ class GoogleKpisFetchAndStore {
    * Checks if the node has field_google_kpis, links to the google kpis entity,
    * if node has field_google_kpis.
    *
-   * @param Node $node
+   * @param \Drupal\node\Entity\Node $node
    *
-   * @return Drupal\Core\Entity\EntityInterface|GoogleKpis
+   * @return \Drupal\Core\Entity\EntityInterface|GoogleKpis
    */
   public function linkGoogleKpisWithNode(Node $node) {
     $gkids = $this->entityTypeManager->getStorage('google_kpis')->getQuery('AND')->condition('referenced_entity', $node->id())->execute();
     $gkid = reset($gkids);
-    if ($node instanceof Node && $node->hasField('field_google_kpis')) {
-      $field_value = $node->field_google_kpis->entity;
-      if ($field_value && $field_value instanceof GoogleKpis) {
-        $google_kpi = $field_value;
-      } else if ($gkid) {
-        $google_kpi = $this->entityTypeManager->getStorage('google_kpis')->load($gkid);
-        if ($node->hasField('field_google_kpis')) {
+    if ($gkid) {
+      if ($node instanceof Node && $node->hasField('field_google_kpis')) {
+        $field_value = $node->field_google_kpis->entity;
+        if ($field_value && $field_value instanceof GoogleKpis) {
+          $google_kpi = $field_value;
+        }
+        else {
+          $google_kpi = $this->entityTypeManager->getStorage('google_kpis')->load($gkid);
           $node->set('field_google_kpis', $google_kpi->id());
           $node->save();
         }
       }
-    } else if ($gkid) {
-      $google_kpi = $this->entityTypeManager->getStorage('google_kpis')->load($gkid);
-      if ($node->hasField('field_google_kpis')) {
+    }
+    else {
+      if ($node instanceof Node && $node->hasField('field_google_kpis')) {
+        $google_kpi = GoogleKpis::create([
+          'name' => $node->getTitle(),
+          'referenced_entity' => $node->id(),
+        ]);
         $node->set('field_google_kpis', $google_kpi->id());
         $node->save();
       }
-    } else {
-      $google_kpi = GoogleKpis::create([
-        'name' => $node->getTitle(),
-        'referenced_entity' => $node->id(),
-      ]);
-      if ($node->hasField('field_google_kpis')) {
-        $node->set('field_google_kpis', $google_kpi->id());
-        $node->save();
+      else {
+        $google_kpi = GoogleKpis::create([
+          'name' => $node->getTitle(),
+          'referenced_entity' => $node->id(),
+        ]);
       }
     }
     return $google_kpi;
   }
+
 }
