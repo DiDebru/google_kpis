@@ -10,6 +10,7 @@ use Drupal\Core\Render\Element;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\google_kpis\Entity\GoogleKpis;
 use Drupal\google_kpis\GoogleKpisFetchAndStore;
+use Drupal\node\Entity\Node;
 
 /**
  * Implements hook_help().
@@ -39,15 +40,7 @@ function google_kpis_theme() {
 }
 
 function google_kpis_form_alter(&$form, FormStateInterface $form_state) {
-  /*$node = Drupal::entityTypeManager()->getStorage('node')->load(1);
-  $gkids = Drupal::entityTypeManager()->getStorage('google_kpis')
-    ->getQuery('AND')
-    ->condition('referenced_entity', $node->id())
-    ->execute();*/
-  /** @var GoogleKpisFetchAndStore $fetch */
-  $fetch = Drupal::service('google_kpis.fetch_and_store');
-  $fetch->fetchAndStoreGoogleSearchConsoleData();
-
+  
 }
 
 /**

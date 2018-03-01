@@ -2,6 +2,8 @@
 
 namespace Drupal\google_kpis\Controller;
 
+use Drupal;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Connection;
 use Drupal\node\Entity\Node;
@@ -77,15 +79,31 @@ class GoogleKpisController extends ControllerBase {
         $node->save();
         $google_kpi = $this->entityTypeManager->getStorage('google_kpis')->load($gkid);
         $view_builder = $this->entityTypeManager->getViewBuilder('google_kpis');
+        $view = $view_builder->view($google_kpi);
         return [
           '#type' => 'markup',
-          '#markup' => render($view_builder->view($google_kpi)),
+          '#markup' => render($view),
         ];
       }
       return [
         '#type' => 'markup',
-        '#markup' => 'Nothing to show here , yet!',
+        '#markup' => $this->t('Nothing to show here , yet!'),
       ];
+    }
+  }
+
+  /**
+   * Checks access for a specific request.
+   *
+   * @return mixed
+   */
+  public function access() {
+    $node = Drupal::routeMatch()->getParameter('node');
+    if ($node) {
+      if (is_numeric($node)) {
+        $node = Node::load($node);
+      }
+      return AccessResult::allowedIf($node->hasField('field_google_kpis'));
     }
   }
 

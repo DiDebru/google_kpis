@@ -41,6 +41,14 @@ class GoogleKpisGlobalSettingsForm extends ConfigFormBase {
       '#type' => 'fieldset',
       '#title' => $this->t('Google Search Console query settings'),
     ];
+    $form['gsc_settings']['query']['gsc_application_name'] = array(
+      '#type' => 'textfield',
+      '#title' => $this->t('Application name'),
+      '#description' => $this->t('The name of your Google app'),
+      '#size' => 40,
+      '#default_value' => $config->get('gsc_application_name'),
+      '#required' => TRUE,
+    );
     $form['gsc_settings']['query']['gsc_start_date'] = array(
       '#type' => 'textfield',
       '#title' => $this->t('Start date'),
@@ -62,15 +70,16 @@ class GoogleKpisGlobalSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Row Limit'),
       '#description' => $this->t('The limit for your Google search console request default is 1000.'),
       '#step' => 100,
+      '#min' => 1,
       '#default_value' => $config->get('gsc_row_limit'),
     );
     $form['gsc_settings']['query']['gsc_prod_url'] = array(
       '#type' => 'textfield',
       '#title' => $this->t('Site Url'),
       '#description' => $this->t('The site you want to fetch data for.'),
-      '#size' => 10,
+      '#size' => 30,
       '#required' => TRUE,
-      '#default_value' => $config->get('gsc_row_limit'),
+      '#default_value' => $config->get('gsc_prod_url'),
     );
     $form['gsc_settings']['auth']['path_to_service_account_json'] = array(
       '#type' => 'textfield',
@@ -110,7 +119,7 @@ class GoogleKpisGlobalSettingsForm extends ConfigFormBase {
       '#type' => 'number',
       '#title' => $this->t('Max Storage'),
       '#description' => $this->t('The maximum value you want your GA data to be stored, default is 29.'),
-      '#default_value' => $config->get('ḿax_storage'),
+      '#default_value' => $config->get('max_storage'),
       '#min' => 1,
     ];
     return parent::buildForm($form, $form_state);
@@ -124,6 +133,7 @@ class GoogleKpisGlobalSettingsForm extends ConfigFormBase {
     $this->config('google_kpis.settings')
       ->set('outside_webroot', $values['outside_webroot'])
       ->set('path_to_service_account_json', $values['path_to_service_account_json'])
+      ->set('gsc_application_name', $values['gsc_application_name'])
       ->set('gsc_start_date', $values['gsc_start_date'])
       ->set('gsc_end_date', $values['gsc_end_date'])
       ->set('gsc_row_limit', $values['gsc_row_limit'])
@@ -137,8 +147,15 @@ class GoogleKpisGlobalSettingsForm extends ConfigFormBase {
   public function validateForm(array &$form, FormStateInterface $form_state) {
     parent::validateForm($form, $form_state);
     $values = $form_state->getValues();
-    if (!file_exists($values['path_to_service_account_json'])) {
-      $form_state->setErrorByName('path_to_service_account_json', $this->t('The file you are trying to reference was not found, or Drupal cannot read it'));
+    if ($values['outside_webroot']) {
+      if (!file_exists($values['path_to_service_account_json'])) {
+        $form_state->setErrorByName('path_to_service_account_json', $this->t('The file you are trying to reference was not found, or Drupal cannot read it'));
+      }
+    }
+    else {
+      if (!file_exists(getcwd() . $values['path_to_service_account_json'])) {
+        $form_state->setErrorByName('path_to_service_account_json', $this->t('The file you are trying to reference was not found, or Drupal cannot read it'));
+      }
     }
   }
 }
