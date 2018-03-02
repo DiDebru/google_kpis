@@ -19,7 +19,6 @@ use Drupal\user\UserInterface;
  *   label = @Translation("Google kpis"),
  *   handlers = {
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
- *     "list_builder" = "Drupal\google_kpis\GoogleKpisListBuilder",
  *     "views_data" = "Drupal\google_kpis\Entity\GoogleKpisViewsData",
  *     "translation" = "Drupal\google_kpis\GoogleKpisTranslationHandler",
  *
