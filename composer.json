@@ -11,6 +11,7 @@
     "source": "http://cgit.drupalcode.org/google_kpis"
   },
   "require": {
-    "google/apiclient": "^2.0"
+    "google/apiclient": "^2.0",
+    "drupal/google_analytics_reports": "^3.0@beta"
   }
 }
