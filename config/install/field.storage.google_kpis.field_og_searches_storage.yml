@@ -1,0 +1,20 @@
+uuid: 4b396d7d-9afc-45d2-84be-0048e4a79f98
+langcode: en
+status: true
+dependencies:
+  module:
+    - google_kpis
+id: google_kpis.field_og_searches_storage
+field_name: field_og_searches_storage
+entity_type: google_kpis
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

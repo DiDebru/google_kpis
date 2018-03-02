@@ -1,0 +1,20 @@
+uuid: 3946121b-acc9-4be3-b210-7b8d9e64738b
+langcode: en
+status: true
+dependencies:
+  module:
+    - google_kpis
+id: google_kpis.field_position
+field_name: field_position
+entity_type: google_kpis
+type: decimal
+settings:
+  precision: 32
+  scale: 5
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

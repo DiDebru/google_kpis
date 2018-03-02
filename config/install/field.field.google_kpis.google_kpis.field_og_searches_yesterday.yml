@@ -1,0 +1,24 @@
+uuid: 6b864f88-5d63-4c43-82b3-465014e12660
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.google_kpis.field_og_searches_yesterday
+  module:
+    - google_kpis
+id: google_kpis.google_kpis.field_og_searches_yesterday
+field_name: field_og_searches_yesterday
+entity_type: google_kpis
+bundle: google_kpis
+label: 'OG Searches Yesterday'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

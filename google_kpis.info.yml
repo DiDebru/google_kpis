@@ -1,0 +1,7 @@
+name: Google KPIs
+type: module
+description: Fetch and Store data from Google Analytics and Google Search Console
+core: 8.x
+package: Google
+dependencies:
+  - google_analytics_reports_api

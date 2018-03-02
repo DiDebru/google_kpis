@@ -1,0 +1,20 @@
+uuid: 5fd8e9ed-8709-4cfe-bfa7-d9a2c7a8fa3d
+langcode: en
+status: true
+dependencies:
+  module:
+    - google_kpis
+id: google_kpis.field_og_searches_yesterday
+field_name: field_og_searches_yesterday
+entity_type: google_kpis
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

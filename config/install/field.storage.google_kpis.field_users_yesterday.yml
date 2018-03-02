@@ -1,0 +1,20 @@
+uuid: 5342784f-a1df-41ee-aec6-8022661e1631
+langcode: en
+status: true
+dependencies:
+  module:
+    - google_kpis
+id: google_kpis.field_users_yesterday
+field_name: field_users_yesterday
+entity_type: google_kpis
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,10 @@
+add google kpis entities:
+  title: 'Create new Google kpis entities'
+
+administer google kpis:
+  title: 'Administer Google kpis'
+  description: 'Allow to access the administration form to configure Google kpis.'
+  restrict access: true
+
+view google kpis entities:
+  title: 'View Google kpis entities'

@@ -1,0 +1,64 @@
+<?php
+
+/**
+ * @file
+ * Contains google_kpis.module.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\google_kpis\Entity\GoogleKpis;
+use Drupal\google_kpis\GoogleKpisFetchAndStore;
+use Drupal\node\Entity\Node;
+
+/**
+ * Implements hook_help().
+ */
+function google_kpis_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the google_kpis module.
+    case 'help.page.google_kpis':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Fetch and Store data from Google Analytics and Google Search Console') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function google_kpis_theme() {
+  return [
+    'google_kpis' => [
+      'render element' => 'elements',
+    ],
+  ];
+}
+
+function google_kpis_form_alter(&$form, FormStateInterface $form_state) {
+  
+}
+
+/**
+ * Prepares variables for Google kpis templates.
+ *
+ * Default template: google_kpis.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the user information and any
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_google_kpis(array &$variables) {
+  // Fetch GoogleKpis Entity Object.
+  $google_kpis = $variables['elements']['#google_kpis'];
+
+  // Helpful $content variable for templates.
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}

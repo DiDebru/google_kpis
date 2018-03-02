@@ -1,0 +1,20 @@
+uuid: a233ce45-675a-4f19-8938-be35f69cd9ac
+langcode: en
+status: true
+dependencies:
+  module:
+    - google_kpis
+id: google_kpis.field_og_searches_summary
+field_name: field_og_searches_summary
+entity_type: google_kpis
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

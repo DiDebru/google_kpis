@@ -1,0 +1,20 @@
+uuid: e7471de9-af6e-4ac0-8ff8-385f5547e8e5
+langcode: en
+status: true
+dependencies:
+  module:
+    - google_kpis
+id: google_kpis.field_page_views_yesterday
+field_name: field_page_views_yesterday
+entity_type: google_kpis
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
