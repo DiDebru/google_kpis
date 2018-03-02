@@ -31,9 +31,9 @@ class GoogleKpisController extends ControllerBase {
   protected $entityTypeManager;
 
   /**
-   * \Drupal\Core\Database\Connection definition.
+   * Drupal\Core\Database\Connection definition.
    *
-   * @var \Drupal\Core\Database\Connection $database
+   * @var \Drupal\Core\Database\Connection
    */
   protected $database;
 
@@ -61,7 +61,7 @@ class GoogleKpisController extends ControllerBase {
    * Show the kpis for the referenced node.
    *
    * @return array
-   *   Return Hello string.
+   *   Return render array.
    */
   public function content() {
     $node = $this->currentRouteMatch->getParameter('node');
@@ -96,6 +96,7 @@ class GoogleKpisController extends ControllerBase {
    * Checks access for a specific request.
    *
    * @return mixed
+   *   Returns access if node has field_google_kpis.
    */
   public function access() {
     $node = Drupal::routeMatch()->getParameter('node');

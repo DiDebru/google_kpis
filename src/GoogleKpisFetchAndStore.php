@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @file Contains Class GoogleKpissFetchAndStore.
- */
-
 namespace Drupal\google_kpis;
 
 use Drupal;
@@ -62,14 +58,10 @@ class GoogleKpisFetchAndStore {
 
   /**
    * Fetch data from GA.
+   *
    * Get all published articles.
    * Flush static entity cache.
-   * Store data to articles.
-   *
-   * @param $start_date
-   *  The offset string the query should start e.g. "-1 day".
-   * @param $end_date
-   *  The offset string the query should end. e.g. "today".
+   * Store data to articles.   *
    */
   public function fetchAndStoreGoogleAnylticsData() {
     /** @var \Drupal\google_analytics_reports_api\GoogleAnalyticsReportsApiFeed $gaReports */
@@ -126,7 +118,7 @@ class GoogleKpisFetchAndStore {
               $ga_users = $article['users'];
               $ga_sessions = $article['sessions'];
               $ga_organicsearches = $article['organicsearches'];
-              /** @var GoogleKpis $google_kpi */
+              /** @var \Drupal\google_kpis\Entity\GoogleKpis $google_kpi */
               $google_kpi = $this->linkGoogleKpisWithNode($node);
               // Get Storage value.
               $ga_sessions_storage = $google_kpi->field_sessions_storage->getValue();
@@ -232,10 +224,9 @@ class GoogleKpisFetchAndStore {
         }
       }
     }
-    catch(Google_Exception $exception) {
+    catch (Google_Exception $exception) {
       Drupal::logger('google_kpis')->error($exception->getMessage());
     }
-
 
   }
 
@@ -256,7 +247,8 @@ class GoogleKpisFetchAndStore {
     if ($outside_webroot) {
       // Fetch GoogleSearchConsole data and store it.
       putenv('GOOGLE_APPLICATION_CREDENTIALS=' . $path_to_auth_json);
-    } else {
+    }
+    else {
       // Fetch GoogleSearchConsole data and store it.
       putenv('GOOGLE_APPLICATION_CREDENTIALS=' . getcwd() . $path_to_auth_json);
     }
@@ -264,8 +256,8 @@ class GoogleKpisFetchAndStore {
     $client->setApplicationName($app_name);
     $client->useApplicationDefaultCredentials();
     $client->setScopes([Google_Service_Webmasters::WEBMASTERS_READONLY]);
-    $service = New Google_Service_Webmasters($client);
-    $query = New Google_Service_Webmasters_SearchAnalyticsQueryRequest();
+    $service = new Google_Service_Webmasters($client);
+    $query = new Google_Service_Webmasters_SearchAnalyticsQueryRequest();
     $query->setStartDate(date("Y-m-d", strtotime($start_date)));
     $query->setEndDate(date('Y-m-d', strtotime($end_date)));
     $query->setDimensions(['page']);
@@ -326,18 +318,22 @@ class GoogleKpisFetchAndStore {
           $count++;
         }
       }
-    } catch (Google_Exception $exception) {
+    }
+    catch (Google_Exception $exception) {
       Drupal::logger('google_kpis')->error($exception->getMessage());
     }
   }
 
   /**
-   * Checks if the node has field_google_kpis, links to the google kpis entity,
-   * if node has field_google_kpis.
+   * Checks if the node has field_google_kpis, links to the google kpis entity.
+   *
+   * If node has field_google_kpis.
    *
    * @param \Drupal\node\Entity\Node $node
+   *   The node object.
    *
    * @return \Drupal\Core\Entity\EntityInterface|GoogleKpis
+   *   GoogleKpis object.
    */
   public function linkGoogleKpisWithNode(Node $node) {
     $gkids = $this->entityTypeManager->getStorage('google_kpis')->getQuery('AND')->condition('referenced_entity', $node->id())->execute();
