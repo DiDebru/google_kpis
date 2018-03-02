@@ -1,7 +1,7 @@
 
 # Google kpis menu items definition
 google_kpis.admin.config.settings:
-  title: Google kpis entity settings
+  title: Google KPIs settings
   description: 'Configure Google KPIs'
   route_name: google_kpis.admin_settings_form
   parent: system.admin_config_services
