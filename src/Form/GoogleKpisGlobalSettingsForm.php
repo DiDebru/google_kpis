@@ -5,6 +5,11 @@ namespace Drupal\google_kpis\Form;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
+/**
+ * Class GoogleKpisGlobalSettingsForm.
+ *
+ * @package Drupal\google_kpis\Form
+ */
 class GoogleKpisGlobalSettingsForm extends ConfigFormBase {
 
   /**
@@ -41,80 +46,80 @@ class GoogleKpisGlobalSettingsForm extends ConfigFormBase {
       '#type' => 'fieldset',
       '#title' => $this->t('Google Search Console query settings'),
     ];
-    $form['gsc_settings']['query']['gsc_application_name'] = array(
+    $form['gsc_settings']['query']['gsc_application_name'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Application name'),
       '#description' => $this->t('The name of your Google app'),
       '#size' => 40,
       '#default_value' => $config->get('gsc_application_name'),
       '#required' => TRUE,
-    );
-    $form['gsc_settings']['query']['gsc_start_date'] = array(
+    ];
+    $form['gsc_settings']['query']['gsc_start_date'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Start date'),
       '#description' => $this->t('The date offset your query should start e.g. -7 days'),
       '#size' => 10,
       '#default_value' => $config->get('gsc_start_date'),
       '#required' => TRUE,
-    );
-    $form['gsc_settings']['query']['gsc_end_date'] = array(
+    ];
+    $form['gsc_settings']['query']['gsc_end_date'] = [
       '#type' => 'textfield',
       '#title' => $this->t('End date'),
       '#description' => $this->t('The date offset your query should end e.g. today'),
       '#size' => 10,
       '#default_value' => $config->get('gsc_end_date'),
       '#required' => TRUE,
-    );
-    $form['gsc_settings']['query']['gsc_row_limit'] = array(
+    ];
+    $form['gsc_settings']['query']['gsc_row_limit'] = [
       '#type' => 'number',
       '#title' => $this->t('Row Limit'),
       '#description' => $this->t('The limit for your Google search console request default is 1000.'),
       '#step' => 100,
       '#min' => 1,
       '#default_value' => $config->get('gsc_row_limit'),
-    );
-    $form['gsc_settings']['query']['gsc_prod_url'] = array(
+    ];
+    $form['gsc_settings']['query']['gsc_prod_url'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Site Url'),
       '#description' => $this->t('The site you want to fetch data for.'),
       '#size' => 30,
       '#required' => TRUE,
       '#default_value' => $config->get('gsc_prod_url'),
-    );
-    $form['gsc_settings']['auth']['path_to_service_account_json'] = array(
+    ];
+    $form['gsc_settings']['auth']['path_to_service_account_json'] = [
       '#type' => 'textfield',
       '#title' => $this->t('The path to your google developer service account json auth.'),
       '#description' => $this->t('If your authentification file is outside of your webroot you will need a full ,from root to leaf, path! e.g. /home/user/path/to/my/auth.json'),
       '#size' => 60,
       '#default_value' => $config->get('path_to_service_account_json'),
-    );
-    $form['gsc_settings']['auth']['outside_webroot'] = array(
+    ];
+    $form['gsc_settings']['auth']['outside_webroot'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Google service account authentication file is outside of webroot'),
       '#default_value' => $config->get('outside_webroot'),
-    );
+    ];
 
     $form['ga_settings'] = [
       '#type' => 'details',
       '#title' => $this->t('Google Analytics Settings'),
       '#open' => TRUE,
     ];
-    $form['ga_settings']['ga_start_date'] = array(
+    $form['ga_settings']['ga_start_date'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Start date'),
       '#description' => $this->t('The date offset your query should start e.g. -1 days'),
       '#size' => 10,
       '#default_value' => $config->get('ga_start_date'),
       '#required' => TRUE,
-    );
-    $form['ga_settings']['ga_end_date'] = array(
+    ];
+    $form['ga_settings']['ga_end_date'] = [
       '#type' => 'textfield',
       '#title' => $this->t('End date'),
       '#description' => $this->t('The date offset your query should end e.g. today'),
       '#size' => 10,
       '#default_value' => $config->get('ga_end_date'),
       '#required' => TRUE,
-    );
+    ];
     $form['ga_settings']['max_storage'] = [
       '#type' => 'number',
       '#title' => $this->t('Max Storage'),
@@ -122,6 +127,7 @@ class GoogleKpisGlobalSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('max_storage'),
       '#min' => 1,
     ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -144,6 +150,9 @@ class GoogleKpisGlobalSettingsForm extends ConfigFormBase {
       ->save();
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function validateForm(array &$form, FormStateInterface $form_state) {
     parent::validateForm($form, $form_state);
     $values = $form_state->getValues();
@@ -158,4 +167,5 @@ class GoogleKpisGlobalSettingsForm extends ConfigFormBase {
       }
     }
   }
+
 }
