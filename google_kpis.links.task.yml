@@ -12,5 +12,5 @@ entity.google_kpis_controller_content:
 
 google_kpis.admin_settings_form:
   route_name: google_kpis.admin_settings_form
-  base_route: google_kpis.settings
+  base_route: google_kpis.admin_settings_form
   title: 'Google api settings'

@@ -17,7 +17,6 @@ use Google_Service_Webmasters;
 use Google_Service_Webmasters_SearchAnalyticsQueryRequest;
 use Drupal\google_kpis\Entity\GoogleKpis;
 
-
 /**
  * Class GoogleAnalyticsFetchAndStore.
  */
@@ -101,15 +100,22 @@ class GoogleKpisFetchAndStore {
       $pageviews_summary = NULL;
       $ogsearches_summary = NULL;
       foreach ($ga_query->results->rows as $article) {
-        // Get system path from path alias.
-        $path_source = $this->database->select('url_alias', 'ua')->fields('ua', ['source'])->condition('alias', $article['pagePath'])->execute()->fetchField();
-        // Get node id from system path.
-        $node_id = filter_var($path_source, FILTER_SANITIZE_NUMBER_INT);
+        // Trim url query paremeter from path.
+        $pagePath = strtok($article['pagePath'], '?');
+        if (strpos($pagePath, 'node') !== FALSE) {
+          $node_id = filter_var($pagePath, FILTER_SANITIZE_NUMBER_INT);
+        }
+        else {
+          // Get system path from path alias.
+          $path_source = $this->database->select('url_alias', 'ua')->fields('ua', ['source'])->condition('alias', $pagePath)->execute()->fetchField();
+          // Get node id from system path.
+          $node_id = filter_var($path_source, FILTER_SANITIZE_NUMBER_INT);
+        }
         if (is_numeric($node_id)) {
           if (!in_array($node_id, $ga_nodes)) {
             $ga_nodes[$node_id] = $node_id;
-            // Reset static entity cache all 50 articles.
-            if ($count && $count % 50 == '0') {
+            // Reset static entity cache all 20 articles.
+            if ($count && $count % 20 == '0') {
               // Reset static entity cache.
               $this->entityTypeManager->getStorage('node')->resetCache();
               $this->entityTypeManager->getStorage('google_kpis')->resetCache();
@@ -132,7 +138,7 @@ class GoogleKpisFetchAndStore {
               $ga_users_storage[]['value'] = $ga_users;
               $ga_pageviews_storage[]['value'] = $ga_pageviews;
               $ga_ogsearches_storage[]['value'] = $ga_organicsearches;
-              // Summary of the last 30 elements.
+              // Summary of elements.
               $max_storage = $this->googleKpisSettings->get('max_storage');
               if (!$max_storage || empty($max_storage) || $max_storage == 0) {
                 $max_storage = 29;
@@ -175,7 +181,7 @@ class GoogleKpisFetchAndStore {
               $google_kpi->set('field_users_yesterday', $ga_users);
               $google_kpi->set('field_page_views_yesterday', $ga_pageviews);
               $google_kpi->set('field_og_searches_yesterday', $ga_organicsearches);
-              // Set storage summary for last 30 days.
+              // Set storage summary.
               $google_kpi->set('field_sessions_summary', $sessions_last_30);
               $google_kpi->set('field_users_summary', $users_summary);
               $google_kpi->set('field_page_views_summary', $pageviews_summary);
@@ -197,8 +203,9 @@ class GoogleKpisFetchAndStore {
       // Get Articles that are not in GA report.
       $nodes_not_in_ga = array_diff($published_nodes, $ga_nodes);
       foreach ($nodes_not_in_ga as $revision_id => $nid) {
-        if ($count && $count % 50 == '0') {
+        if ($count && $count % 20 == '0') {
           // Reset static entity cache.
+          $this->entityTypeManager->getStorage('node')->resetCache();
           $this->entityTypeManager->getStorage('google_kpis')->resetCache();
         }
         $node = $this->entityTypeManager->getStorage('node')->load($nid);
@@ -214,10 +221,10 @@ class GoogleKpisFetchAndStore {
           if (is_null($google_kpi->field_users_summary->value)) {
             $google_kpi->set('field_users_summary', '0');
           }
-          if (is_null($google_kpi->field_pageviews_summary->value)) {
+          if (is_null($google_kpi->field_page_views_summary->value)) {
             $google_kpi->set('field_page_views_summary', '0');
           }
-          if (is_null($google_kpi->field_ogsearches_summary->value)) {
+          if (is_null($google_kpi->field_og_searches_summary->value)) {
             $google_kpi->set('field_og_searches_summary', '0');
           }
           $google_kpi->save();
@@ -279,19 +286,21 @@ class GoogleKpisFetchAndStore {
           if (!in_array($node_id, $gsc_nodes)) {
             $gsc_nodes[$node_id] = $node_id;
             // Reset static entity cache all 50 iterations.
-            if ($count && $count % 50 == '0') {
+            if ($count && $count % 20 == '0') {
               $this->entityTypeManager->getStorage('node')->resetCache();
               $this->entityTypeManager->getStorage('google_kpis')->resetCache();
             }
             $node = $this->entityTypeManager->getStorage('node')->load($node_id);
-            $google_kpi = $this->linkGoogleKpisWithNode($node);
-            $gsc_ctr = $gsc_row->getCtr() * 100;
-            $google_kpi->set('field_clicks', $gsc_row->getClicks());
-            $google_kpi->set('field_impressions', $gsc_row->getImpressions());
-            $google_kpi->set('field_ctr', $gsc_ctr);
-            $google_kpi->set('field_position', $gsc_row->getPosition());
-            $google_kpi->save();
-            $count++;
+            if ($node instanceof Node) {
+              $google_kpi = $this->linkGoogleKpisWithNode($node);
+              $gsc_ctr = $gsc_row->getCtr() * 100;
+              $google_kpi->set('field_clicks', $gsc_row->getClicks());
+              $google_kpi->set('field_impressions', $gsc_row->getImpressions());
+              $google_kpi->set('field_ctr', $gsc_ctr);
+              $google_kpi->set('field_position', $gsc_row->getPosition());
+              $google_kpi->save();
+              $count++;
+            }
           }
         }
       }
@@ -301,11 +310,12 @@ class GoogleKpisFetchAndStore {
       // Get Nodes that are not in GSC report.
       $nodes_not_in_gsc = array_diff($published_nodes, $gsc_nodes);
       foreach ($nodes_not_in_gsc as $revision_id => $nid) {
-        if ($count && $count % 50 == '0') {
+        if ($count && $count % 20 == '0') {
           // Reset static entity cache.
           $this->entityTypeManager->getStorage('node')->resetCache();
           $this->entityTypeManager->getStorage('google_kpis')->resetCache();
         }
+        $node = $this->entityTypeManager->getStorage('node')->load($nid);
         if ($node instanceof Node) {
           $google_kpi = $this->linkGoogleKpisWithNode($node);
           $google_kpi->set('field_clicks', 0);
@@ -343,6 +353,9 @@ class GoogleKpisFetchAndStore {
           $node->set('field_google_kpis', $google_kpi->id());
           $node->save();
         }
+      }
+      else {
+        $google_kpi = $this->entityTypeManager->getStorage('google_kpis')->load($gkid);
       }
     }
     else {

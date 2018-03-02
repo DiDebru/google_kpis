@@ -27,7 +27,6 @@ use Drupal\user\UserInterface;
  *       "default" = "Drupal\google_kpis\Form\GoogleKpisForm",
  *       "add" = "Drupal\google_kpis\Form\GoogleKpisForm",
  *       "edit" = "Drupal\google_kpis\Form\GoogleKpisForm",
- *       "delete" = "Drupal\google_kpis\Form\GoogleKpisDeleteForm",
  *     },
  *     "access" = "Drupal\google_kpis\GoogleKpisAccessControlHandler",
  *     "route_provider" = {
@@ -47,13 +46,13 @@ use Drupal\user\UserInterface;
  *     "status" = "status",
  *   },
  *   links = {
- *     "canonical" = "/admin/structure/google_kpis/{google_kpis}",
- *     "add-form" = "/admin/structure/google_kpis/add",
- *     "edit-form" = "/admin/structure/google_kpis/{google_kpis}/edit",
- *     "delete-form" = "/admin/structure/google_kpis/{google_kpis}/delete",
- *     "collection" = "/admin/structure/google_kpis",
+ *     "canonical" = "/admin/config/services/google_kpis/{google_kpis}",
+ *     "add-form" = "/admin/config/services/google_kpis/add",
+ *     "edit-form" = "/admin/config/services/google_kpis/{google_kpis}/edit",
+ *     "delete-form" = "/admin/config/services/google_kpis/{google_kpis}/delete",
+ *     "collection" = "/admin/config/services/google_kpis",
  *   },
- *   field_ui_base_route = "google_kpis.settings"
+ *   field_ui_base_route = "google_kpis.admin_settings_form"
  * )
  */
 class GoogleKpis extends ContentEntityBase implements GoogleKpisInterface {
@@ -145,6 +144,9 @@ class GoogleKpis extends ContentEntityBase implements GoogleKpisInterface {
     return $this;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function getReferencedEntityId() {
     return $this->get('referenced_entity')->entity ? $this->get('referenced_entity')->entity->id() : NULL;
   }

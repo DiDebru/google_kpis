@@ -74,4 +74,12 @@ interface GoogleKpisInterface extends ContentEntityInterface, EntityChangedInter
    */
   public function setPublished($published);
 
+  /**
+   * Get the referenced entity id.
+   *
+   * @return int
+   *   The referenced entity_id.
+   */
+  public function getReferencedEntityId();
+
 }
