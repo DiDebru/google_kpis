@@ -11,7 +11,6 @@ use Google_Client;
 use Google_Exception;
 use Google_Service_Webmasters;
 use Google_Service_Webmasters_SearchAnalyticsQueryRequest;
-use Drupal\google_kpis\Entity\GoogleKpis;
 
 /**
  * Class GoogleAnalyticsFetchAndStore.
@@ -61,7 +60,7 @@ class GoogleKpisFetchAndStore {
    *
    * Get all published articles.
    * Flush static entity cache.
-   * Store data to articles.   *
+   * Store data to articles.
    */
   public function fetchAndStoreGoogleAnylticsData() {
     /** @var \Drupal\google_analytics_reports_api\GoogleAnalyticsReportsApiFeed $gaReports */
@@ -227,7 +226,6 @@ class GoogleKpisFetchAndStore {
     catch (Google_Exception $exception) {
       Drupal::logger('google_kpis')->error($exception->getMessage());
     }
-
   }
 
   /**

@@ -36,7 +36,6 @@ function google_kpis_drush_command() {
  * Callback function for google_kpis drush command.
  *
  * Fetch and store google statistic data.
- *
  * @see Drupal\google_kpis\GoogleAnalyticsFetchAndStore
  */
 function drush_google_kpis_fetch_and_store() {

@@ -136,7 +136,18 @@ class GoogleKpisGlobalSettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $values = $form_state->getValues();
-    $this->config('google_kpis.settings')->set('outside_webroot', $values['outside_webroot'])->set('path_to_service_account_json', $values['path_to_service_account_json'])->set('gsc_application_name', $values['gsc_application_name'])->set('gsc_start_date', $values['gsc_start_date'])->set('gsc_end_date', $values['gsc_end_date'])->set('gsc_row_limit', $values['gsc_row_limit'])->set('gsc_prod_url', $values['gsc_prod_url'])->set('ga_start_date', $values['ga_start_date'])->set('ga_end_date', $values['ga_end_date'])->set('max_storage', $values['max_storage'])->save();
+    $this->config('google_kpis.settings')
+      ->set('outside_webroot', $values['outside_webroot'])
+      ->set('path_to_service_account_json', $values['path_to_service_account_json'])
+      ->set('gsc_application_name', $values['gsc_application_name'])
+      ->set('gsc_start_date', $values['gsc_start_date'])
+      ->set('gsc_end_date', $values['gsc_end_date'])
+      ->set('gsc_row_limit', $values['gsc_row_limit'])
+      ->set('gsc_prod_url', $values['gsc_prod_url'])
+      ->set('ga_start_date', $values['ga_start_date'])
+      ->set('ga_end_date', $values['ga_end_date'])
+      ->set('max_storage', $values['max_storage'])
+      ->save();
   }
 
   /**
