@@ -5,12 +5,8 @@
  * Contains google_kpis.module.
  */
 
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\google_kpis\Entity\GoogleKpis;
-use Drupal\google_kpis\GoogleKpisFetchAndStore;
-use Drupal\node\Entity\Node;
 
 /**
  * Implements hook_help().
@@ -37,10 +33,6 @@ function google_kpis_theme() {
       'render element' => 'elements',
     ],
   ];
-}
-
-function google_kpis_form_alter(&$form, FormStateInterface $form_state) {
-  
 }
 
 /**

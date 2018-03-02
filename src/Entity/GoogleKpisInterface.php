@@ -13,8 +13,6 @@ use Drupal\user\EntityOwnerInterface;
  */
 interface GoogleKpisInterface extends ContentEntityInterface, EntityChangedInterface, EntityOwnerInterface {
 
-  // Add get/set methods for your configuration properties here.
-
   /**
    * Gets the Google kpis name.
    *
@@ -67,7 +65,7 @@ interface GoogleKpisInterface extends ContentEntityInterface, EntityChangedInter
    * Sets the published status of a Google kpis.
    *
    * @param bool $published
-   *   TRUE to set this Google kpis to published, FALSE to set it to unpublished.
+   *   TRUE to set this GoogleKPIs to published, FALSE to set it to unpublished.
    *
    * @return \Drupal\google_kpis\Entity\GoogleKpisInterface
    *   The called Google kpis entity.
