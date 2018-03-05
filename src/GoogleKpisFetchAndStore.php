@@ -69,6 +69,9 @@ class GoogleKpisFetchAndStore {
     $start_date = $this->googleKpisSettings->get('ga_start_date');
     $end_date = $this->googleKpisSettings->get('ga_end_date');
     $profile_id = $this->googleAnalyticsReportsApiSettings->get('profile_id');
+    if (!$profile_id || $profile_id == 0 ) {
+      return;
+    }
     $params = [
       'profile_id' => 'ga:' . $profile_id,
       'start_date' => strtotime($start_date),
