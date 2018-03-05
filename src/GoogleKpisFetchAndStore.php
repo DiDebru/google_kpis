@@ -78,7 +78,7 @@ class GoogleKpisFetchAndStore {
     ];
     try {
       $ga_query = $gaReports->queryReportFeed($params);
-      // Get all published articles.
+      // Get all published node ids.
       $published_nodes = $this->entityTypeManager->getStorage('node')
         ->getQuery('AND')
         ->condition('status', 1)
@@ -296,7 +296,7 @@ class GoogleKpisFetchAndStore {
         }
       }
       $count = NULL;
-      // Get all published Nodes.
+      // Get all published node ids.
       $published_nodes = $this->entityTypeManager->getStorage('node')->getQuery('AND')->condition('status', 1)->execute();
       // Get Nodes that are not in GSC report.
       $nodes_not_in_gsc = array_diff($published_nodes, $gsc_nodes);
