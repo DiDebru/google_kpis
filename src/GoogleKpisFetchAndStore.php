@@ -11,6 +11,7 @@ use Google_Client;
 use Google_Exception;
 use Google_Service_Webmasters;
 use Google_Service_Webmasters_SearchAnalyticsQueryRequest;
+use Drupal\google_kpis\Entity\GoogleKpis;
 
 /**
  * Class GoogleAnalyticsFetchAndStore.
